@@ -3,39 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebApp Camera</title>
-    <style>
-        video, canvas {
-            display: block;
-            margin: 20px auto;
-        }
-    </style>
+    <title>WebApp with Camera</title>
 </head>
 <body>
-    <h1>WebApp Camera</h1>
-    <video id="video" width="320" height="240" autoplay playsinline></video>
-    <button id="snap">Snap Photo</button>
-    <canvas id="canvas" width="320" height="240"></canvas>
-
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const snapButton = document.getElementById('snap');
-        const context = canvas.getContext('2d');
-
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then((stream) => {
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch((err) => {
-                console.error("Error accessing camera: ", err);
-                alert("Error accessing camera: " + err.message);
-            });
-
-        snapButton.addEventListener('click', () => {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        });
-    </script>
+    <iframe src="camera.html" width="100%" height="600px"></iframe>
 </body>
 </html>
