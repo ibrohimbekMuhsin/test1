@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Camera</title>
+    <style>
+        video, canvas {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebApp Camera</h1>
+    <video id="video" width="320" height="240" autoplay playsinline></video>
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="320" height="240"></canvas>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapButton = document.getElementById('snap');
+        const context = canvas.getContext('2d');
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch((err) => {
+                    console.error("Error accessing camera: ", err);
+                    alert("Error accessing camera: " + err.message);
+                });
+        } else {
+            alert("Your browser does not support getUserMedia API");
+        }
+
+        snapButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        });
+    </script>
+</body>
+</html>
