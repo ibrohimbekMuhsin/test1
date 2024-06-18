@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Protocol</title>
+    <title>WebApp Camera</title>
     <style>
         video, canvas {
             display: block;
@@ -35,19 +35,41 @@
             protocolMessage.textContent = `You are using an unknown protocol: ${currentProtocol}`;
         }
 
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then((stream) => {
-                    video.srcObject = stream;
-                    video.play();
-                })
-                .catch((err) => {
-                    console.error("Error accessing camera: ", err);
-                    alert("Error accessing camera: " + err.message);
-                });
-        } else {
-            alert("Your browser does not support getUserMedia API");
+        // Функция для доступа к камере
+        function startCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then((stream) => {
+                        video.srcObject = stream;
+                        video.play();
+                    })
+                    .catch((err) => {
+                        console.error("Error accessing camera: ", err);
+                        alert("Error accessing camera: " + err.message);
+                    });
+            } else {
+                alert("Your browser does not support getUserMedia API");
+            }
         }
+
+        // Проверка разрешений
+        function checkPermissions() {
+            navigator.permissions.query({ name: 'camera' }).then((permissionStatus) => {
+                if (permissionStatus.state === 'granted') {
+                    startCamera();
+                } else if (permissionStatus.state === 'prompt') {
+                    alert('Please allow camera access.');
+                } else {
+                    alert('Camera access is denied. Please check your settings.');
+                }
+            }).catch((error) => {
+                console.error("Permission query error: ", error);
+                startCamera();
+            });
+        }
+
+        // Запрос доступа к камере
+        checkPermissions();
 
         snapButton.addEventListener('click', () => {
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
