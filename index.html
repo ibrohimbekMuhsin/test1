@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Camera</title>
+</head>
+<body>
+    <h1>WebApp Camera</h1>
+    <form id="photo-form">
+        <input type="file" accept="image/*" capture="environment" id="cameraInput">
+        <br>
+        <img id="photo" alt="The photo will appear here">
+    </form>
+
+    <script>
+        document.getElementById('cameraInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = document.getElementById('photo');
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
