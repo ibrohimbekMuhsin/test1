@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebApp Camera</title>
+    <title>Check Protocol</title>
     <style>
         video, canvas {
             display: block;
@@ -13,6 +13,7 @@
 </head>
 <body>
     <h1>WebApp Camera</h1>
+    <p id="protocol-message"></p>
     <video id="video" width="320" height="240" autoplay playsinline></video>
     <button id="snap">Snap Photo</button>
     <canvas id="canvas" width="320" height="240"></canvas>
@@ -22,6 +23,17 @@
         const canvas = document.getElementById('canvas');
         const snapButton = document.getElementById('snap');
         const context = canvas.getContext('2d');
+        const protocolMessage = document.getElementById('protocol-message');
+
+        // Проверка текущего протокола
+        const currentProtocol = window.location.protocol;
+        if (currentProtocol === 'https:') {
+            protocolMessage.textContent = 'Your connection is secure (HTTPS).';
+        } else if (currentProtocol === 'http:') {
+            protocolMessage.textContent = 'Your connection is not secure (HTTP). Please use HTTPS for camera access.';
+        } else {
+            protocolMessage.textContent = `You are using an unknown protocol: ${currentProtocol}`;
+        }
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true })
