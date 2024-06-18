@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebApp Camera</title>
+    <style>
+        video, canvas {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
 </head>
 <body>
     <h1>WebApp Camera</h1>
-    <form id="photo-form">
-        <input type="file" accept="image/*" capture="environment" id="cameraInput">
-        <br>
-        <img id="photo" alt="The photo will appear here">
-    </form>
+    <video id="video" width="320" height="240" autoplay></video>
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="320" height="240"></canvas>
 
     <script>
-        document.getElementById('cameraInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = document.getElementById('photo');
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
+        // Получаем элементы страницы
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapButton = document.getElementById('snap');
+        const context = canvas.getContext('2d');
+
+        // Запрашиваем доступ к камере
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error("Error accessing camera: ", err);
+            });
+
+        // Обработчик нажатия кнопки для захвата фото
+        snapButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
         });
     </script>
 </body>
