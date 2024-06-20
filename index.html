@@ -12,68 +12,11 @@
     </style>
 </head>
 <body>
-    <h1>WebApp Camera</h1>
-    <p id="protocol-message"></p>
-    <video id="video" width="320" height="240" autoplay playsinline></video>
-    <button id="snap">Snap Photo</button>
-    <canvas id="canvas" width="320" height="240"></canvas>
-
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const snapButton = document.getElementById('snap');
-        const context = canvas.getContext('2d');
-        const protocolMessage = document.getElementById('protocol-message');
-
-        // Проверка текущего протокола
-        const currentProtocol = window.location.protocol;
-        if (currentProtocol === 'https:') {
-            protocolMessage.textContent = 'Your connection is secure (HTTPS).';
-        } else if (currentProtocol === 'http:') {
-            protocolMessage.textContent = 'Your connection is not secure (HTTP). Please use HTTPS for camera access.';
-        } else {
-            protocolMessage.textContent = `You are using an unknown protocol: ${currentProtocol}`;
-        }
-
-        // Функция для доступа к камере
-        function startCamera() {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then((stream) => {
-                        video.srcObject = stream;
-                        video.play();
-                    })
-                    .catch((err) => {
-                        console.error("Error accessing camera: ", err);
-                        alert("Error accessing camera: " + err.message);
-                    });
-            } else {
-                alert("Your browser does not support getUserMedia API");
-            }
-        }
-
-        // Проверка разрешений
-        function checkPermissions() {
-            navigator.permissions.query({ name: 'camera' }).then((permissionStatus) => {
-                if (permissionStatus.state === 'granted') {
-                    startCamera();
-                } else if (permissionStatus.state === 'prompt') {
-                    alert('Please allow camera access.');
-                } else {
-                    alert('Camera access is denied. Please check your settings.');
-                }
-            }).catch((error) => {
-                console.error("Permission query error: ", error);
-                startCamera();
-            });
-        }
-
-        // Запрос доступа к камере
-        checkPermissions();
-
-        snapButton.addEventListener('click', () => {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        });
-    </script>
+    <script async src="https://telegram.org/js/telegram-widget.js?7"
+    data-telegram-login="UniconsoftStaffBot"
+    data-size="large"
+    data-radius="10"
+    data-auth-url="https://yourwebsite.com/api/users/auth/telegram"
+    data-request-access="write"></script>
 </body>
 </html>
